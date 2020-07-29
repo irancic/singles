@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <title>Vue components demo</title>
+    </head>
+<body>
+
+    <div id="vueRoot">
+        <h2>Vue is loaded: {{status}}</h2>
+
+        <ul>
+            <li v-for="p in pData" :key="p.id"><input type="checkbox" selected="false" readonly @click="p.taken = !p.taken" /> 
+                 <b :style="{visibility: (p.taken ? 'visible': 'hidden')}">O</b> {{p.name}} : {{p.price}}</li>
+        </ul>
+        <br />
+        <b>Sum of price: </b> {{sumPrice}}
+        <br/> a za:
+        <artikl v-for="a in pData" :key="a.id"
+            :details="a"
+            ></artikl>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script type="text/javascript">
+        
+        Vue.component( 'artikl',
+            {
+                data:function(){
+                    return{
+
+                    }
+                },
+                props: ['details'],
+                template:'<div v-if="details.taken"><b>{{details.id}}</b> - {{details.name}} ({{details.price}} kn)</div>'
+
+            }
+        );
+        var v = new Vue(
+            {
+                el : "#vueRoot",
+                data : function (){
+                    return {
+                        status : 'Ok.',
+                        pData : [
+                            { id:4, name:"Milk", price:5.9, taken:true},
+                            { id:7, name:"Bread", price:5.1, taken:true},
+                            { id:19, name:"Detergent", price:60.0, taken:false},
+                            { id:31, name:"Ketchup", price:13.5, taken:false}
+                            
+                        ]
+                    }
+
+                },
+                computed:{
+                    sumPrice : function(){
+                        var sum = 0;
+                        for(i in this.pData.filter(p=>p.taken)) {
+                            sum+=this.pData[i].price;
+                        }
+                        return sum;
+                    },
+                    shopLista : function(){
+                        return this.pData.filter(p=>p.taken);
+                    }
+                    
+                }
+                
+            }
+        );
+    </script>
+</body>
+    </html>
